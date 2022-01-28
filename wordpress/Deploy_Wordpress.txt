@@ -1,0 +1,81 @@
+================================================================================
+Deploying wordpress on AWS EC2
+================================================================================
+sudo apt install apache2 -y
+sudo systemctl status apache2
+sudo systemctl start apache2
+sudo systemctl enable apache2
+## check with IP address in browser
+---------------------------------------------------------------------------------
+## set up datebase server (Setup and connect to the server)
+sudo apt install mariadb-server mariadb-client -y
+sudo systemctl start mariadb
+sudo systemctl status mariadb
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## configure database
+sudo mysql_secure_installation
+---------------------------------------------------------------------------------
+#asks for password→  hit enter → enter and re-enter new password
+#prompts anonymous users? →  Yes
+#prompts disallow remore root login → Y
+#prompts test database and access to it → Y
+#reload privillage tables → Y
+---------------------------------------------------------------------------------
+sudo systemctl restart mariadb
+#now we have successfully configured our database server
+---------------------------------------------------------------------------------
+## Install PHP (php 7.2 version- by default)
+sudo apt install php php-mysql php-gd php-cli php-common -y
+---------------------------------------------------------------------------------
+### download wordpress
+sudo apt install wget unzip -y
+sudo wget https://wordpress.org/latest.zip
+---------------------------------------------------------------------------------
+#check it intalled or not →    ls
+sudo unzip latest.zip
+sudo cp -r wordpress/* /var/www/html/
+#check all the files → cd /var/www/html/    → ls   → ls -l
+#need to change the ownership of the file from root to www-data
+sudo chown www-data:www-data -R /var/www/html     (did recursive here- that’s y used ‘R’)
+#check ownership  →    ls -l
+---------------------------------------------------------------------------------
+## need to delete the index.html file
+sudo rm -rf index.html
+---------------------------------------------------------------------------------
+##check the page
+---------------------------------------------------------------------------------
+refresh the page → we are on the wordpress installation- > choose language – Asks for the database information:
+---------------------------------------------------------------------------------
+# we haven’t created any databse inside out databse server
+cd ..
+sudo mysql -u root -p
+#root password <What we have set>
+---------------------------------------------------------------------------------
+#need to create a datase
+MariaDB [(none)]> create database wordpress;
+MariaDB [(none)]> create user "<username>"@"%" identified by "<password>";
+MariaDB [(none)]>  grant all privileges on wordpress.* to “<username>”@”%”;
+exit
+---------------------------------------------------------------------------------
+## open wordpress page and enter credentials
+datebase name: wordpress
+user name: <above given credentials>
+password: <above given credentials>
+databse host: local host
+table prefix: wp_ (default)
+→ [submit]
+---------------------------------------------------------------------------------
+# Run the installation
+
+→ site title  -> <welcome to practice session on wordpress>
+username: admin
+password: password
+email address: <type mail id>
+install wordpress
+----------------------------------------------------------------------------------
+
+login to the wordpress
+username:
+password:
+
+==========================================================
